@@ -1,7 +1,7 @@
 Production guide
 ================
 
-The following HTTP readers are already set internally and should not be set again:
+The following HTTP headers are already set internally and should not be set again:
 
 ```
 'Server'                 => 'Mastodon',
@@ -24,22 +24,24 @@ server {
   listen 80;
   listen [::]:80;
   server_name example.com;
-  return 301 https://$host$request_uri;
+  # Useful for Let's Encrypt
+  location /.well-known/acme-challenge/ { allow all; }
+  location / { return 301 https://$host$request_uri; }
 }
 
 server {
-  listen 443 ssl;
-  listen [::]:443 ssl;
+  listen 443 ssl http2;
+  listen [::]:443 ssl http2;
   server_name example.com;
 
   ssl_protocols TLSv1.2;
-  ssl_ciphers EECDH+AESGCM:EECDH+AES;
-  ssl_ecdh_curve prime256v1;
+  ssl_ciphers HIGH:!MEDIUM:!LOW:!aNULL:!NULL:!SHA;
   ssl_prefer_server_ciphers on;
   ssl_session_cache shared:SSL:10m;
 
   ssl_certificate     /etc/letsencrypt/live/example.com/fullchain.pem;
   ssl_certificate_key /etc/letsencrypt/live/example.com/privkey.pem;
+  ssl_dhparam         /etc/ssl/certs/dhparam.pem;
 
   keepalive_timeout    70;
   sendfile             on;
@@ -60,6 +62,10 @@ server {
 
   location / {
     try_files $uri @proxy;
+  }
+
+  location ~ ^/(assets|system/media_attachments/files|system/accounts/avatars) {
+    add_header Cache-Control "public, max-age=31536000, immutable";
   }
 
   location @proxy {
@@ -103,38 +109,74 @@ server {
 
 ## Running in production without Docker
 
-It is recommended to create a special user for mastodon on the server (you could call the user `mastodon`), though remember to disable outside login for it. You should only be able to get into that user through `sudo su - mastodon`.
+It is recommended to create a special user for mastodon on the server (you could call the user `mastodon`), though remember to disable outside login for it. You should only be able to get into that user through `sudo -u mastodon`.
 
 ## General dependencies
 
-    sudo apt-get install imagemagick ffmpeg libpq-dev libxml2-dev libxslt1-dev nodejs file git curl
-    curl -sL https://deb.nodesource.com/setup_4.x | sudo bash -
+### Ubuntu / Debian
 
+    sudo apt-get install imagemagick ffmpeg libpq-dev libxml2-dev libxslt1-dev file git curl
+    curl -sL https://deb.nodesource.com/setup_6.x | sudo bash -
     sudo apt-get install nodejs
+    sudo npm install -g yarn
 
+### CentOS / RHEL
+
+    sudo yum install libxml2-devel ImageMagick libxslt-devel git curl file
+    sudo yum -y install epel-release
+    sudo rpm --import http://li.nux.ro/download/nux/RPM-GPG-KEY-nux.ro
+    sudo rpm -Uvh http://li.nux.ro/download/nux/dextop/el7/x86_64/nux-dextop-release-0-5.el7.nux.noarch.rpm
+    sudo yum -y install ffmpeg ffmpeg-devel
+
+    sudo yum group install "Development tools"
+    curl -sL https://rpm.nodesource.com/setup_6.x | sudo bash -
+    sudo yum install nodejs
     sudo npm install -g yarn
 
 ## Redis
 
+### Ubuntu / Debian
+
     sudo apt-get install redis-server redis-tools
+
+### CentOS / RHEL
+
+    sudo yum install redis rubygem-redis
 
 ## Postgres
 
+### Ubuntu / Debian
+
     sudo apt-get install postgresql postgresql-contrib
+
+### CentOS / RHEL
+
+    sudo yum install postgresql-server postgresql postgresql-contrib postgresql-devel
+
+Initial Setup postgres:
+
+    sudo postgresql-setup initdb
+    sudo systemctl start postgresql
+    sudo systemctl enable postgresql
+
+### All Operating Systems:
 
 Set up a user and database for Mastodon:
 
-    sudo su - postgres
-    psql
+    sudo -u postgres psql
 
 In the prompt:
 
     CREATE USER mastodon CREATEDB;
     \q
 
+### Ubuntu 16.04
+
 Under Ubuntu 16.04, you will need to explicitly enable ident authentication so that local users can connect to the database without a password:
 
+```sh
     sudo sed -i '/^local.*postgres.*peer$/a host    all     all     127.0.0.1/32    ident' /etc/postgresql/9.?/main/pg_hba.conf
+```
 
 and install an ident daemon, which does not come installed by default:
 
@@ -155,17 +197,22 @@ Then once `rbenv` is ready, run `rbenv install 2.4.1` to install the Ruby versio
 
 ## Git
 
-You need the `git-core` package installed on your system. If it is so, from the `mastodon` user:
+You need the `git-core` package installed on your system. If it is so, run the shell from the `mastodon` user:
+
+    sudo -su mastodon
+
+And enter the following commands:
 
     cd ~
     git clone https://github.com/tootsuite/mastodon.git live
     cd live
+    git checkout $(git tag | tail -n 1)
 
 Then you can proceed to install project dependencies:
 
     gem install bundler
     bundle install --deployment --without development test
-    yarn install
+    yarn install --pure-lockfile
 
 ## Configuration
 
@@ -179,6 +226,11 @@ Fill in the important data, like host/port of the redis database, host/port/user
     rake secret
 
 To get a random string. If you are setting up on one single server (most likely), then `REDIS_HOST` is localhost and `DB_HOST` is `/var/run/postgresql`, `DB_USER` is `mastodon` and `DB_NAME` is `mastodon_production` while `DB_PASS` is empty because this setup will use the ident authentication method (system user "mastodon" maps to postgres user "mastodon").
+
+Configuring the instance hostname:
+
+- `LOCAL_DOMAIN` should be the domain/hostname of your instance. This is **absolutely required** as it is used for generating unique IDs for everything federation-related.
+- `LOCAL_HTTPS` set it to `true` if HTTPS works on your website. This is used to generate canonical URLs, which is also important when generating and parsing federation-related IDs.
 
 ## Setup
 
@@ -262,20 +314,39 @@ This allows you to `sudo systemctl enable /etc/systemd/system/mastodon-*.service
 There are several tasks that should be run once a day to ensure that mastodon is
 running smoothly. As your mastodon user run `crontab -e` and enter the following
 
-```
-RAILS_ENV=production
-@daily cd /home/mastodon/live && /home/mastodon/.rbenv/shims/bundle exec rake mastodon:media:clear > /dev/null
-@daily cd /home/mastodon/live && /home/mastodon/.rbenv/shims/bundle exec rake mastodon:push:refresh > /dev/null
-@daily cd /home/mastodon/live && /home/mastodon/.rbenv/shims/bundle exec rake mastodon:feeds:clear > /dev/null
+```sh
+    RAILS_ENV=production
+    @daily cd /home/mastodon/live && /home/mastodon/.rbenv/shims/bundle exec rake mastodon:daily > /dev/null
 ```
 
 ## Things to look out for when upgrading Mastodon
 
-You can upgrade Mastodon with a `git pull` from the repository directory. You may need to run:
+If you want a stable release for production use, you should use tagged releases. To checkout the latest available tagged version:
+
+```sh
+    cd ~mastodon/live/
+    git fetch
+    git checkout $(git tag | tail -n 1)
+```
+
+As part of your deploy, you may need to run:
 
 - `RAILS_ENV=production bundle exec rails db:migrate`
+
+if anything in the `/db/` directory has changed, and/or
+
+- `yarn install --pure-lockfile`
 - `RAILS_ENV=production bundle exec rails assets:precompile`
 
-Depending on which files changed, e.g. if anything in the `/db/` or `/app/assets` directory changed, respectively. Also, Mastodon runs in memory, so you need to restart it before you see any changes. If you're using systemd, that would be:
+if anything in the `/app/assets` directory changed.
 
+Please read the [**release notes**](https://github.com/tootsuite/mastodon/releases/) when you upgrade,
+they might contain specific instructions about how to update (and they always include information
+about which new features the release has, and which bugs are fixed).
+
+Also, Mastodon runs in memory, so you need to restart it before you see any changes (including new
+precompiled assets). If you're using systemd, that would be:
+
+```sh
     sudo systemctl restart mastodon-*.service
+```

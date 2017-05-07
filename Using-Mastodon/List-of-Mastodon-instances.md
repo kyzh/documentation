@@ -11,6 +11,7 @@ List of Mastodon instances
 | [mastodon.cx](https://mastodon.cx/) |Alternative Mastodon instance hosted in France|Yes|Yes|
 | [mastodon.network](https://mastodon.network) |N/A|Yes|Yes|
 | [awoo.space](https://awoo.space) |Intentionally moderated, only federates with mastodon.social|Yes|No|
+| [linuxrocks.online](https://linuxrocks.online) |Community-driven instance for people who love linux and open source software.  Federation allowed|Yes|No|
 | [animalliberation.social](https://animalliberation.social) |Animal Rights|Yes|No|
 | [socially.constructed.space](https://socially.constructed.space) |Single user|No|No|
 | [epiktistes.com](https://epiktistes.com) |N/A|Yes|No|
@@ -70,7 +71,7 @@ List of Mastodon instances
 | [neumastodon.com](https://neumastodon.com/)|Northeastern University Mastodon |Yes|No|
 | [dancingbanana.party](https://dancingbanana.party)|La banane qui danse.|Yes|No|
 | [mastodon.brussels](https://mastodon.brussels/)|Le mastodon pour les belges, si vous aimez la bonne ambiance venez nous rejoindre !|Yes|Yes|
-| [mastodon.llamasweet.tech](https://mastodon.llamasweet.tech/)|Mastodon about Android developement|Yes|No|
+| [mastodon.llamasweet.tech](https://mastodon.llamasweet.tech/)|Mastodon about tech,dev and SysAdmin|Yes|Yes|
 | [manx.social](https://manx.social/)|Instance for the Isle of Man|Yes|Yes|
 | [mastodon.host](https://mastodon.host/)|Lightly moderated, federates everywhere and has a follow bot ( Huge federated timeline )|Yes|No|
 | [mastodon.fun](https://mastodon.fun/)|Mastodon for everyone ! |Yes|Yes|

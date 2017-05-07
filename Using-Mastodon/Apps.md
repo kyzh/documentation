@@ -9,14 +9,24 @@ Some people have started working on apps for the Mastodon API. Here is a list of
 |---|--------|----|------------|
 |[Tusky](https://play.google.com/store/apps/details?id=com.keylesspalace.tusky)|Android|<https://github.com/Vavassor/Tusky>|[@Vavassor@mastodon.social](https://mastodon.social/users/Vavassor)|
 |mastodroid|Android|<https://github.com/alin-rautoiu/mastodroid>|[@charlag@mastodon.social](https://mastodon.social/users/charlag)|
+|Pawoo|[iOS](https://itunes.apple.com/us/app/pawoo/id1229070679)/[Android](https://play.google.com/store/apps/details?id=jp.pxv.pawoo)|<https://play.google.com/store/apps/details?id=jp.pxv.pawoo>|[@pixiv@pawoo.net](https://pawoo.net/users/pixiv)|
 |TootyFruity|iOS/[Android](https://play.google.com/store/apps/details?id=ch.kevinegli.tootyfruity221258)|<https://github.com/eggplantPrince/tootyFruity>|[@eggplant@mastodon.social](https://mastodon.social/users/eggplant)|
 |11t|iOS/[Android](https://play.google.com/store/apps/details?id=com.jeroensmeets.mastodon)|<https://github.com/jeroensmeets/mastodon-app>|[@jeroensmeets@mastodon.social](https://mastodon.social/users/jeroensmeets)|
 |[Amaroq](https://itunes.apple.com/us/app/amarok-for-mastodon/id1214116200?ls=1&mt=8)|iOS|<https://itunes.apple.com/us/app/amarok-for-mastodon/id1214116200?ls=1&mt=8>|[@eurasierboy@mastodon.social](https://mastodon.social/users/eurasierboy)|
 |Albatross|iOS||[@goldie_ice@mastodon.social](https://mastodon.social/users/goldie_ice)|
 |Tooter|Chrome|<https://github.com/ineffyble/tooter>|[@effy@mastodon.social](https://mastodon.social/users/effy)|
 |tootstream|CLI|<https://github.com/magicalraccoon/tootstream>|[@Raccoon@mastodon.social](https://mastodon.social/users/Raccoon)|
+|toot|CLI|<https://github.com/ihabunek/toot>|[@ihabunek@mastodon.social](https://mastodon.social/users/ihabunek)|
+| [Capella](https://github.com/coolstar/Capella) | Windows 7, 8.1, 10 | https://coolstar.org/capella | [@coolstar@mastodon.social](https://mastodon.social/users/coolstar)|
+|[WinMasto](https://github.com/drasticactions/WinMasto)|Windows 10|<https://github.com/drasticactions/WinMasto>|[@drasticactions@mastodon.network](https://mastodon.network/users/drasticactions)|
 |[Mastodon UWP (beta)](https://github.com/woachk/mastodon/releases)|Windows 10|<https://github.com/woachk/mastodon>|[@my123@mastodon.social](https://mastodon.social/users/my123)|
 |[mastodon.el](https://github.com/jdenen/mastodon.el)|Emacs|<https://github.com/jdenen/mastodon.el>|[@johnson@mastodon.social](https://mastodon.social/users/johnson)|
+| [Mstdn](https://github.com/rhysd/Mstdn) | macOS, Windows, Linux |<https://github.com/rhysd/Mstdn>|[@Linda_pp@mstdn.jp](https://mstdn.jp/@Linda_pp) or [@inudog@mastodon.social](https://mastodon.social/@inudog) |
+|[Mastodon Lang Remover](https://github.com/arthurlacoste/mastodon-lang-remover)|browser|<https://github.com/arthurlacoste/mastodon-lang-remover>|[@arthak@mastodon.social](https://mastodon.social/users/arthak)|
+|[Mstdn (Mastodon CLI)](https://github.com/mattn/go-mastodon)|CLI|<https://github.com/mattn/go-mastodon>|[@mattn@mstdn.jp](https://mstdn.jp/@mattn)|
+|[madonctl](https://github.com/McKael/madonctl)|CLI, cross-platform|<https://github.com/McKael/madonctl>|[@McKael@mamot.fr](https://mamot.fr/@McKael)|
+|[Twidere](https://play.google.com/store/apps/details?id=org.mariotaku.twidere)|Android|<https://github.com/TwidereProject/Twidere-Android>|[@twidereproject](https://twitter.com/twidereproject)|
+|[Mastodon-iOS](https://itunes.apple.com/us/app/mastodon-ios/id1229531204?l=zh&ls=1&mt=8)|[iOS](https://itunes.apple.com/us/app/mastodon-ios/id1229531204?l=zh&ls=1&mt=8)||[@darkcl@mastodon.cloud](https://mastodon.cloud/@darkcl)|
 
 ## Bridges from/to other platforms
 
@@ -24,6 +34,8 @@ Some people have started working on apps for the Mastodon API. Here is a list of
 |---|--------|----|------------|
 |Retoot|CLI|<https://gitlab.com/mojo42/retoot>|[@Mojo@apoil.org](https://apoil.org/users/mojo)|
 |Mastodon.tools|Wordpress, web browser, social network|<https://github.com/davidlibeau/mastodon-tools>|[@David@mastodon.xyz](https://mastodon.xyz/users/David)|
+|RSSTootalizer|Web browser|<https://github.com/blind-coder/rsstootalizer>|[@blindcoder@toot.berlin](https://toot.berlin/users/blindcoder)|
+|umrc|IRC|<https://github.com/Ulrar/umrc>|[@lemonnierk@ulrar.net](https://mastodon.ulrar.net/users/lemonnierk)|
 
 ## Bots
 
