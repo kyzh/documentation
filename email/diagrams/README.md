@@ -1,20 +1,16 @@
 Diagrams
 =====
 
-This document highlight when emails are used and what the process looks like.  
+This document highlight when emails are used and what the process looks like.
  
-### What are email used for in Mastodon?
-In the default case, email will be first sent to confirm your user.
-Users can also choose to receive notification for various types of activity.
-Finally password reset and password reset confiration is done via email.
-Instance admin can avoid using emails altogether too.
+### What is email used for in Mastodon?
+By default, email is sent to confirm new user accounts. Users can also choose to receive interaction notifications via email. Finally password reset and password reset confirmation is done via email.
 
 ### Flow diagram
-From the user's perspective, emails come from Mastodon.
+From the user's perspective, emails come from Mastodon This is a one-way relationship: the user never sends email to Mastodon.
 ![User's perspective](mastodons_user_perspective.png)
 
-The email system can be separated in 2 parts.
-One is within the user realm, as they choose their email provider.
+The email system has two parts. One is within the user realm, as they choose their email provider.
 On the other hand, the SMTP is in administrator realm as they control the SMTP service used.
 ![Conceptual flow](mastodon_conceptual_flow.png)
 
